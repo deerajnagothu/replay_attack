@@ -28,7 +28,7 @@ while True:
     cv2.imshow('Frame', frame)
 
     # Show the replay attack frames
-    if (play_attack):
+    if (play_attack and not recording):
         # Safety check if the play button was pressed,
         # but there aren't any recordings
         if (len(replay_attack) == 0):
@@ -37,11 +37,14 @@ while True:
             # Display the frames from the list of recordings
             attack_frame = replay_attack[attack_idx]
             dup_frame = np.add(attack_frame,
-                            (np.random.rand(len(attack_frame), len(attack_frame[0]), 3)*4-2).astype(int))
+                            (np.random.rand(len(attack_frame), len(attack_frame[0]), 3)*4-2))
+            np.clip(dup_frame, 0, 255, out=dup_frame)
+            dup_frame = dup_frame.astype('uint8')
+
             cv2.imshow(REPLAY_TITLE, dup_frame)
 
             
-            cv2.imshow(REPLAY_TITLE, replay_attack[attack_idx])
+#            cv2.imshow(REPLAY_TITLE, replay_attack[attack_idx])
             attack_idx = (attack_idx+1)%len(replay_attack)
     else:
         # If not playing the attack, show the live camera feed
