@@ -1,6 +1,8 @@
-import numpy
+#!/usr/bin/python3.6
+import numpy as np
 import cv2
 from copy import deepcopy
+import random
 
 # Set up to default camera
 cap = cv2.VideoCapture(0)
@@ -33,6 +35,12 @@ while True:
             cv2.imshow(REPLAY_TITLE, frame)
         else:
             # Display the frames from the list of recordings
+            attack_frame = replay_attack[attack_idx]
+            dup_frame = np.add(attack_frame,
+                            (np.random.rand(len(attack_frame), len(attack_frame[0]), 3)*4-2).astype(int))
+            cv2.imshow(REPLAY_TITLE, dup_frame)
+
+            
             cv2.imshow(REPLAY_TITLE, replay_attack[attack_idx])
             attack_idx = (attack_idx+1)%len(replay_attack)
     else:
